@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.kbdShop.dao.k_productXMLMapper">
+ 
+    <insert id="uploadProduct" 
+    	parameterType="com.example.demo.kbdShop.vo.k_productVO">
+    	INSERT 
+    	INTO k_product 
+    	VALUES(NULL,#{pId},#{pDiv},#{pName},#{modelNo},#{pCompany},#{pDate},#{price},#{stock})
+    </insert>
+     
+     <insert id="uploadRepPicture" 
+    	parameterType="com.example.demo.kbdShop.vo.k_productVO">
+    	INSERT 
+    	INTO k_product_picture_rep
+    	VALUES(NULL,#{pId},#{repImgName},#{repImgPath})
+    </insert>
+     
+    <insert id="uploadPicture" 
+    	parameterType="com.example.demo.kbdShop.vo.k_pictureVO">
+    	INSERT
+    	INTO k_product_picture
+    	VALUES(NULL,#{pId},#{imgIndex},#{imgName},#{imgPath})
+    </insert>
+    
+    <select id="getList" 
+    	resultType="com.example.demo.kbdShop.vo.k_productVO"
+    	parameterType="String">
+        SELECT *
+        FROM k_product 
+        INNER JOIN k_product_picture_rep on k_product.pId=k_product_picture_rep.pId
+        WHERE pDiv = #{pDiv}
+    </select>
+    
+    <select id="getProduct" 
+    	resultType="com.example.demo.kbdShop.vo.k_productVO"
+    	parameterType="String">
+        SELECT *
+        FROM k_product 
+        WHERE pId = #{pId}
+    </select>
+	
+	<select id="getImg" 
+    	resultType="com.example.demo.kbdShop.vo.k_pictureVO"
+    	parameterType="String">
+        SELECT picNum,pId,imgIndex,imgName,imgPath
+        FROM k_product_picture
+        WHERE pId = #{pId}
+    </select>
+	
+	<select id="getRepImg" 
+    	resultType="String"
+    	parameterType="String">
+        SELECT imgName
+        FROM k_product_picture
+        WHERE pId = #{pId} and imgIndex = 0
+    </select>
+    
+    <insert id="saveOrder" 
+    	parameterType="com.example.demo.kbdShop.vo.k_productVO">
+    	INSERT 
+    	INTO k_order 
+    	VALUES(NULL,#{id},#{pId},#{pDiv},#{pName},#{modelNo},#{pCompany},#{price},#{qty},#{sumPrice},#{useCoupon},now())
+    </insert>
+    
+    <select id="getListAll" 
+    	resultType="com.example.demo.kbdShop.vo.k_productVO">
+        SELECT *
+        FROM k_product 
+        INNER JOIN k_product_picture_rep on k_product.pId=k_product_picture_rep.pId
+    </select>
+	
+	<update id="updateProduct" 
+    	parameterType="com.example.demo.kbdShop.vo.k_productVO">
+    	UPDATE k_product 
+    	SET pName=#{pName}, modelNo=#{modelNo}, pCompany=#{pCompany}, pDate=#{pDate}, price=#{price}, stock=#{stock}
+    	WHERE pId=#{pId}
+    </update>
+	
+	<update id="updateRepImg" 
+    	parameterType="com.example.demo.kbdShop.vo.k_productVO">
+    	UPDATE k_product_picture_rep 
+    	SET repImgName=#{repImgName}, repImgPath=#{repImgPath}
+    	WHERE pId=#{pId}
+    </update>
+	
+	<update id="updateFile" 
+    	parameterType="com.example.demo.kbdShop.vo.k_pictureVO">
+    	UPDATE k_product_picture
+    	SET imgName=#{imgName}, imgPath=#{imgPath}
+    	WHERE pId=#{pId} and imgIndex=#{imgIndex}
+    </update>
+    
+    <select id="getUserOrderList" 
+    	resultType="com.example.demo.kbdShop.vo.k_productVO"
+    	parameterType="String">
+        SELECT *
+        FROM k_order  
+        WHERE id=#{id}
+    </select>
+    
+    <select id="getProductListPage"
+       parameterType="org.springframework.data.domain.Pageable"
+       resultType="com.example.demo.kbdShop.vo.k_productVO">
+        SELECT *
+        FROM k_product LIMIT #{offset}, #{pageSize}
+        INNER JOIN k_product_picture_rep on k_product.pId=k_product_picture_rep.pId
+    </select>
+	
+</mapper>

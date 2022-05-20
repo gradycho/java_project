@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.kbdShop.dao.k_boardXMLMapper">
+
+	<select id="getList" 
+    	resultType="com.example.demo.kbdShop.vo.k_boardVO"
+    	parameterType="Integer">
+        SELECT *
+        FROM k_board
+        WHERE deptNum = #{deptNum}
+    </select>
+	
+	<select id="getContent" 
+    	resultType="com.example.demo.kbdShop.vo.k_boardVO"
+    	parameterType="Integer">
+        SELECT *
+        FROM k_board
+        WHERE boardNum = #{num}
+    </select>
+    
+    <insert id="saveBoard" 
+    	parameterType="com.example.demo.kbdShop.vo.k_boardVO">
+    	INSERT 
+    	INTO k_board 
+    	VALUES(NULL,#{id},#{deptNum},#{title},NOW(),0,0,#{content})
+    </insert>
+    
+    <update id="updateContent" 
+    	parameterType="com.example.demo.kbdShop.vo.k_boardVO">
+    	UPDATE k_board 
+    	SET title=#{title}, content=#{content}
+    	WHERE boardNum=#{boardNum}
+    </update>
+    
+    <delete id="deleteContent" parameterType="Integer">
+    	DELETE FROM k_board WHERE boardNum=#{boardNum}
+    </delete>
+    
+</mapper>

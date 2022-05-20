@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.kbdShop.dao.k_memberXMLMapper">
+    
+    <!--insert 요소는 resultType 속성이 없어도 생성된 행의 수(정수)가 리턴됨-->
+    <insert id="insertUser" 
+    	parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+    	INSERT INTO k_member VALUES(NULL,#{id},#{pwd},#{name},#{phone},#{email},#{address},0)
+    </insert>
+    
+	<!-- 한 행을 추가하고 자동증가필드의 값을 파라미터 객체의 num변수에 할당-->
+	<insert id="addAndGetKey" useGeneratedKeys="true" keyProperty="num"
+        parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+		INSERT INTO k_member VALUES(NULL,#{id},#{pwd},#{name},#{phone},#{email},#{address},#{coupon})
+	</insert>
+	
+	<select id="getUserById" 
+    	resultType="com.example.demo.kbdShop.vo.k_memberVO"
+    	parameterType="String">
+        SELECT memNum,id,pwd,name,phone,email,address,coupon
+        FROM k_member
+        WHERE id = #{id}
+    </select>
+    
+    <select id="getUserCouponById" 
+    	resultType="Integer"
+    	parameterType="String">
+        SELECT coupon
+        FROM k_member
+        WHERE id = #{id}
+    </select>
+    
+    <select id="getUserList" 
+    	resultType="com.example.demo.kbdShop.vo.k_memberVO">
+        SELECT memNum,id,pwd,name,phone,email,address,coupon
+        FROM k_member
+    </select>
+
+    <!--update 요소는 resultType 속성이 없어도 변경된 행의 수(정수)가 리턴됨-->
+    <update id="updateUser" 
+    	parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+    	UPDATE k_member 
+    	SET name=#{name}, phone=#{phone}, email=#{email}, address=#{address}, coupon=#{coupon}
+    	WHERE id=#{id}
+    </update>
+    
+    <update id="updateUserCoupon" 
+    	parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+    	UPDATE k_member 
+    	SET coupon=#{coupon}
+    	WHERE id=#{id}
+    </update>
+
+    <!--delete 요소는 resultType 속성이 없어도 변경된 행의 수(정수)가 리턴됨-->
+    <delete id="deleteUser" parameterType="Integer">
+    	DELETE FROM k_member WHERE memNum=#{memNum}
+    </delete>
+    
+    <select id="findWithoutId" 
+    	resultType="com.example.demo.kbdShop.vo.k_memberVO"
+    	parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+    	SELECT * FROM k_member
+    	<where>
+    		<if test="name != null">
+    			name=#{name}
+    		</if>
+    		<if test="phone != null">
+    			AND phone=#{phone}
+    		</if>
+    		<if test="email != null">
+    			AND email=#{email}
+    		</if>
+    	</where>
+    </select>
+    
+    <select id="login"
+    	resultType="com.example.demo.kbdShop.vo.k_memberVO"
+    	parameterType="com.example.demo.kbdShop.vo.k_memberVO">
+    	SELECT * FROM k_member 
+    	WHERE id=#{id} AND pwd=#{pwd}
+    </select>
+    
+    <select id="idCheck"
+    	resultType="com.example.demo.kbdShop.vo.k_memberVO"
+    	parameterType="String">
+    	SELECT * FROM k_member 
+    	WHERE id=#{id}
+    </select>
+    
+</mapper>
